@@ -1,0 +1,14 @@
+.classpath
+.factorypath
+.project
+/.settings/
+/target/
+/bin/
+/.gradle/
+/build/
+/dist/
+intellij-code-style.xml
+mobility-auth-service.iml
+/.idea/
+/libs/*.jar
+/.scannerwork/

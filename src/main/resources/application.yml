@@ -1,0 +1,24 @@
+spring:
+  profiles:
+    active: "local"
+server:
+  port: 8098
+  servlet:
+    context-path: /mobility-auth
+---
+spring:
+  profiles: local
+server:
+  port: 8098
+  servlet:
+    context-path: /some-docker-thing
+some-service-group:
+  endpoints:
+    some-service-url: http://google.com
+---
+spring:
+  profiles: prod
+server:
+  port: 8099
+  servlet:
+    context-path: /mobility-auth

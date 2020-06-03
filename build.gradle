@@ -1,0 +1,65 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.1.7.RELEASE'
+        classpath 'io.spring.gradle:dependency-management-plugin:1.0.8.RELEASE'
+    }
+}
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'java'
+apply plugin: 'jacoco'
+
+group = 'com.byronaltice.somedockerthing'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
+
+    implementation 'commons-codec:commons-codec:1.13'
+
+    implementation 'org.projectlombok:lombok:1.18.12'
+
+    implementation "org.springframework.boot:spring-boot-starter-actuator:${spring_boot_version}"
+    implementation "org.springframework.boot:spring-boot-starter-web:${spring_boot_version}"
+    implementation "org.springframework.boot:spring-boot-starter-logging:${spring_boot_version}"
+    implementation 'org.springframework.retry:spring-retry:1.2.5.RELEASE'
+    implementation 'org.springframework:spring-aspects:5.2.2.RELEASE'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${spring_boot_version}"
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+}
+
+task moveJar {
+    doLast {
+        copy {
+            from(zipTree(tasks.bootJar.outputs.files.singleFile))
+            into "docker"
+        }
+    }
+}
+
+jar.finalizedBy moveJar
+
+test {
+    //we want display the following test events
+    testLogging {
+        events "PASSED", "STARTED", "FAILED", "SKIPPED"
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
+}
+
